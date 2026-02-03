@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="module" src="custom-calendar.js"></script>
+</head>
+<body>
+    
+    <!-- With events -->
+    <custom-calendar 
+        events='[
+            {
+                "title": "Team Meeting",
+                "startDate": "2026-01-15",
+                "location": "Conference Room A",
+                "link": "https://meet.google.com/xxx",
+                "locationLink": "https://maps.google.com/?q=Conference+Room+A",
+                "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop",
+                "color": "#1f628e"
+            }
+        ]'>
+    </custom-calendar>
+
+    <custom-calendar 
+        events='[
+            {
+                "title": "Team Meeting",
+                "startDate": "2026-01-15",
+                "endDate": "2026-01-16",
+                "location": "Conference Room A",
+                "link": "https://meet.google.com/xxx",
+                "locationLink": "https://maps.google.com/?q=Conference+Room+A",
+                "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop",
+                "color": "#1f628e"
+            }
+        ]'>
+    </custom-calendar>
+
+    <custom-calendar 
+        events='[
+            {
+                "title": "Team Meeting",
+                "startDate": "2026-01-15",
+                "endDate": "2026-01-15",
+                "startTime": "14:00",
+                "location": "Conference Room A",
+                "link": "https://meet.google.com/xxx",
+                "locationLink": "https://maps.google.com/?q=Conference+Room+A",
+                "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop",
+                "color": "#1f628e"
+            }
+        ]'>
+    </custom-calendar>
+    
+    <!-- Dynamic events -->
+    <script>
+        const myEvents = [
+            {
+                title: "Team Meeting",
+                startDate: "2026-01-15",
+                startTime: "14:00",
+                endTime: "15:30",
+                location: "Conference Room A",
+                link: "https://meet.google.com/xxx",
+                locationLink: "https://maps.google.com/?q=Conference+Room+A",
+                image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop",
+                color: "#1f628e"
+            }
+        ];
+        
+        const calendar = document.createElement('custom-calendar');
+        calendar.setAttribute('events', JSON.stringify(myEvents));
+        document.body.appendChild(calendar);
+    </script>
+</body>
+</html>
