@@ -375,7 +375,9 @@ class CustomCalendar extends HTMLElement {
 
 @media (hover: none) and (pointer: coarse) {
     .jw-event-tooltip {
-        display: none !important;
+        width: 250px;
+        padding: 12px;
+        max-width: calc(100vw - 40px);
     }
     
     .jw-calendar-day.jw-has-event:hover {
