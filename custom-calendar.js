@@ -485,41 +485,30 @@ class CustomCalendar extends HTMLElement {
             this.render();
         });
 
-        eventDays.forEach(dayEl => {
-            dayEl.addEventListener('mouseenter', () => this.showTooltip(dayEl));
-            dayEl.addEventListener('mouseleave', (e) => {
-                const tooltip = shadow.querySelector('.jw-event-tooltip');
-                if (tooltip && tooltip.contains(e.relatedTarget)) {
-                    return;
-                }
-                this.hideTooltip();
-            });
-        });
-
         const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 
         eventDays.forEach(dayEl => {
         if (isTouch) {
             dayEl.addEventListener('click', (e) => {
-            e.stopPropagation();
+                e.stopPropagation();
 
-            if (this.currentTooltipDay === dayEl) {
-                this.hideTooltip();
-            } else {
-                this.showTooltip(dayEl);
-            }
+                if (this.currentTooltipDay === dayEl) {
+                    this.hideTooltip();
+                } else {
+                    this.showTooltip(dayEl);
+                }
             });
         } else {
             dayEl.addEventListener('mouseenter', () => this.showTooltip(dayEl));
             dayEl.addEventListener('mouseleave', (e) => {
-            const tooltip = shadow.querySelector('.jw-event-tooltip');
-            if (tooltip && tooltip.contains(e.relatedTarget)) return;
-            this.hideTooltip();
+                const tooltip = shadow.querySelector('.jw-event-tooltip');
+                if (tooltip && tooltip.contains(e.relatedTarget)) return;
+                this.hideTooltip();
             });
         }
         });
 
-        document.addEventListener('click', () => this.hideTooltip());
+        //document.addEventListener('click', () => this.hideTooltip());
     }
     
     showTooltip(dayElement) {
