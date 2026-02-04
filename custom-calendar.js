@@ -148,7 +148,7 @@ class CustomCalendar extends HTMLElement {
 .jw-calendar-day {
     aspect-ratio: 1 / 1;
     background: var(--jw-subsection__background-color--default, white);
-    border-radius: 4px;
+    border-radius: 6px;
     position: relative;
     overflow: hidden;
     cursor: default;
@@ -200,7 +200,7 @@ class CustomCalendar extends HTMLElement {
     color: white;
     font-size: 0.7rem;
     padding: 2px 6px;
-    border-radius: 10px;
+    border-radius: 6px;
     z-index: 2;
 }
 
@@ -213,7 +213,7 @@ class CustomCalendar extends HTMLElement {
     position: absolute;
     z-index: 10000;
     background: var(--jw-subsection__background-color--default, white);
-    border-radius: 8px;
+    border-radius: 6px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.2);
     padding: 20px;
     width: 320px;
@@ -622,35 +622,38 @@ class CustomCalendar extends HTMLElement {
     
     positionTooltip(dayElement, tooltip) {
         const dayRect = dayElement.getBoundingClientRect();
-        const tooltipWidth = 320;
-        const tooltipHeight = tooltip.offsetHeight;
+        const hostRect = this.getBoundingClientRect();
+        const tooltipRect = tooltip.getBoundingClientRect();
+        
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+        const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
         
         let left = dayRect.right;
-        let top = dayRect.top + scrollTop;
+        let top = dayRect.top + scrollY;
         
-        if (left + tooltipWidth > scrollLeft + viewportWidth - 20) {
-            left = dayRect.left - tooltipWidth;
+        if (left + tooltipRect.width > viewportWidth - 20) {
+            left = dayRect.left - tooltipRect.width;
             
-            if (left < scrollLeft + 20) {
-                left = dayRect.left + scrollLeft +100;
-                top = dayRect.bottom + scrollTop;
+            if (left < 20) {
+                left = Math.max(20, dayRect.left + scrollX - (tooltipRect.width / 2) + (dayRect.width / 2));
+                top = dayRect.bottom + scrollY + 10;
                 
-                if (top + tooltipHeight > scrollTop + viewportHeight - 20) {
-                    top = dayRect.top + scrollTop - tooltipHeight - 10;
+                if (top + tooltipRect.height > scrollY + viewportHeight - 20) {
+                    top = dayRect.top + scrollY - tooltipRect.height - 10;
                 }
             }
         }
         
-        if (top + tooltipHeight > scrollTop + viewportHeight - 20) {
-            top = scrollTop + viewportHeight - tooltipHeight - 20;
+        if (left < 20) left = 20;
+        if (left + tooltipRect.width > viewportWidth - 20) {
+            left = viewportWidth - tooltipRect.width - 20;
         }
-
-        if (top < scrollTop + 20) {
-            top = scrollTop + 20;
+        
+        if (top < scrollY + 20) top = scrollY + 20;
+        if (top + tooltipRect.height > scrollY + viewportHeight - 20) {
+            top = scrollY + viewportHeight - tooltipRect.height - 20;
         }
         
         tooltip.style.left = `${left}px`;
