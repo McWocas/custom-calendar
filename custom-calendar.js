@@ -630,21 +630,17 @@ class CustomCalendar extends HTMLElement {
       
         const tooltipWidth = tooltip.offsetWidth;
         const tooltipHeight = tooltip.offsetHeight;
-        const gap = 10;
       
-        // Position next to the day square
-        let left = dayRect.right - containerRect.left + gap;
+        let left = dayRect.right - containerRect.left;
         let top = dayRect.top - containerRect.top;
       
-        // Flip to left if overflowing
         if (left + tooltipWidth > containerRect.width) {
-          left = dayRect.left - containerRect.left - tooltipWidth - gap;
+          left = dayRect.left - containerRect.left - tooltipWidth;
         }
       
-        // Clamp vertically so it stays visible
         top = Math.max(
-          gap,
-          Math.min(top, containerRect.height - tooltipHeight - gap)
+          0,
+          Math.min(top, containerRect.height - tooltipHeight)
         );
       
         tooltip.style.position = 'absolute';
