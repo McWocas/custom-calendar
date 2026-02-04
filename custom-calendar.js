@@ -510,7 +510,7 @@ class CustomCalendar extends HTMLElement {
         }
         });
 
-        //document.addEventListener('click', () => this.hideTooltip());
+        document.addEventListener('click', () => this.hideTooltip());
     }
     
     showTooltip(dayElement) {
