@@ -127,6 +127,7 @@ class CustomCalendar extends HTMLElement {
 
 .jw-calendar-grid {
     display: grid;
+    position: relative;
     grid-template-columns: repeat(7, 1fr);
     gap: 8px;
 }
@@ -541,7 +542,9 @@ class CustomCalendar extends HTMLElement {
             }
         });
         
-        this.shadowRoot.appendChild(tooltip);
+        const container = this.shadowRoot.querySelector('.jw-calendar-grid');
+        container.appendChild(tooltip);
+
         
         this.positionTooltip(dayElement, tooltip);
     }
@@ -622,43 +625,33 @@ class CustomCalendar extends HTMLElement {
     
     positionTooltip(dayElement, tooltip) {
         const dayRect = dayElement.getBoundingClientRect();
-        const hostRect = this.getBoundingClientRect();
-        const tooltipRect = tooltip.getBoundingClientRect();
-        
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-        const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-        const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
-        
-        let left = dayRect.right;
-        let top = dayRect.top + scrollY;
-        
-        if (left + tooltipRect.width > viewportWidth - 20) {
-            left = dayRect.left - tooltipRect.width;
-            
-            if (left < 20) {
-                left = Math.max(20, dayRect.left + scrollX - (tooltipRect.width / 2) + (dayRect.width / 2));
-                top = dayRect.bottom + scrollY + 10;
-                
-                if (top + tooltipRect.height > scrollY + viewportHeight - 20) {
-                    top = dayRect.top + scrollY - tooltipRect.height - 10;
-                }
-            }
+        const container = this.shadowRoot.querySelector('.jw-calendar-grid');
+        const containerRect = container.getBoundingClientRect();
+      
+        const tooltipWidth = tooltip.offsetWidth;
+        const tooltipHeight = tooltip.offsetHeight;
+        const gap = 10;
+      
+        // Position next to the day square
+        let left = dayRect.right - containerRect.left + gap;
+        let top = dayRect.top - containerRect.top;
+      
+        // Flip to left if overflowing
+        if (left + tooltipWidth > containerRect.width) {
+          left = dayRect.left - containerRect.left - tooltipWidth - gap;
         }
-        
-        if (left < 20) left = 20;
-        if (left + tooltipRect.width > viewportWidth - 20) {
-            left = viewportWidth - tooltipRect.width - 20;
-        }
-        
-        if (top < scrollY + 20) top = scrollY + 20;
-        if (top + tooltipRect.height > scrollY + viewportHeight - 20) {
-            top = scrollY + viewportHeight - tooltipRect.height - 20;
-        }
-        
+      
+        // Clamp vertically so it stays visible
+        top = Math.max(
+          gap,
+          Math.min(top, containerRect.height - tooltipHeight - gap)
+        );
+      
+        tooltip.style.position = 'absolute';
         tooltip.style.left = `${left}px`;
         tooltip.style.top = `${top}px`;
-    }
+      }
+      
     
     hideTooltip() {
         if (this.currentTooltip) {
